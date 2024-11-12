@@ -1,1 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editing Request Status</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background: #fff;
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: width 0.5s ease;
+    }
+    .container.expand {
+      width: 500px;
+      transition: width 0.5s ease;
+    }
+    h1 {
+      font-size: 22px;
+      color: #7851a9;
+      margin-bottom: 30px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .input-group {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+    .input-group input {
+      padding: 10px;
+      border-radius: 30px;
+      border: 1px solid #ddd;
+      outline: none;
+      width: 70%;
+      font-size: 14px;
+      color: #333;
+    }
+    .input-group button {
+      padding: 8px 16px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .input-group button.loading::after {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border: 2px solid #fff;
+      border-top: 2px solid transparent;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .result {
+      display: none;
+      margin-top: 30px;
+    }
+    .result h2 {
+      font-size: 18px;
+      color: #4a90e2;
+      margin: 10px 0;
+      font-weight: 700;
+    }
+    .result p {
+      font-size: 14px;
+      color: #555;
+      margin: 10px 0;
+    }
+    .highlight {
+      font-weight: 700;
+      color: #7851a9;
+    }
+    .status-info p {
+      font-size: 16px;
+      color: #333;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .status {
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 10px;
+      padding: 15px 20px;
+      color: #fff;
+      display: inline-block;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+    .status-accepted {
+      background-color: #28a745;
+    }
+    .status-takenup {
+      background-color: #ffc107;
+      color: #333;
+    }
+    .status-rejected {
+      background-color: #dc3545;
+    }
+    .status-pending {
+      background-color: #6c757d;
+    }
+    .contact-buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .contact-buttons a {
+      text-decoration: none;
+      font-size: 14px;
+      color: #333;
+      padding: 10px 20px;
+      border-radius: 30px;
+      background: #e0e7ff;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: bold;
+    }
+    .contact-buttons a img {
+      width: 20px;
+    }
+  h4 {
+    margin-top: 10px;
+  color: gray;
+    font-size: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="container" id="container">
+    <h1>Editing Request Status</h1>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Enter your gmail.." required>
+      <button id="checkButton" onclick="checkStatus()">Check Status</button>
+    </div>
+    <div id="result" class="result">
+      <h2>Hello, <span class="highlight">Client Name 👋</span></h2>
+      <p>Your Request ID: <span class="highlight">123</span></p>
+      <p><span class="highlight">Your Request:</span></p>
+      <div class="status-info">
+        <p style="background-color: #dcd8fc; padding: 10px; border-radius: 8px;">Type of Edit</p>
+        <p>is</p>
+        <div id="statusText" class="status"></div>
+      </div>
+      <div class="contact-buttons">
+        <a href="mailto:someone@example.com">
+          <img src="https://img.icons8.com/ios-filled/50/000000/email-sign.png" alt="Mail"> Mail To
+        </a>
+        <a href="https://chat.google.com/">
+          <img src="https://img.icons8.com/color/48/000000/google-chat.png" alt="Chat"> Chat With
+        </a>
+      </div>
+        <h4>@sachethan_salian_creation</h4>
+    </div>
+  </div>
+
+  <script>
+    const webAppUrl = "https://script.google.com/macros/s/AKfycbzFgpCMbyypB9oat7GW05uvncFiayTSzoXqcT3t6WrlKyz8Oe07ZpLO9fpHLcjdEQ9c/exec"; // Replace with your actual Apps Script Web App URL
+
+    async function checkStatus() {
+      const email = document.getElementById("email").value.trim();
+      const resultDiv = document.getElementById("result");
+      const statusText = document.getElementById("statusText");
+      const checkButton = document.getElementById("checkButton");
+      const container = document.getElementById("container");
+
+      resultDiv.style.display = 'none';
+      statusText.className = "status"; // Reset class
+
+      if (!email) {
+        alert("Please enter a valid email.");
+        return;
+      }
+
+      checkButton.classList.add("loading"); // Add loading effect
+
+      try {
+        const response = await fetch(webAppUrl);
+        const data = await response.json();
+
+        const clientData = data.find(row => row[2] === email);
+
+        if (clientData) {
+          resultDiv.style.display = 'block';
+          container.classList.add("expand"); // Animate container width expansion
+
+          document.querySelector(".highlight").textContent = clientData[1];
+          document.querySelector("#result p span").textContent = clientData[0];
+          document.querySelector(".status-info p").textContent = clientData[3];
+          statusText.textContent = clientData[4].toUpperCase();
+
+          switch (clientData[4].toLowerCase()) {
+            case 'accepted':
+              statusText.classList.add("status-accepted");
+              break;
+            case 'taken up':
+              statusText.classList.add("status-takenup");
+              break;
+            case 'rejected':
+              statusText.classList.add("status-rejected");
+              break;
+            case 'pending':
+              statusText.classList.add("status-pending");
+              break;
+          }
+        } else {
+          alert("No record found for this email.");
+        }
+      } catch (error) {
+        alert("Failed to fetch data. Please try again later.");
+      } finally {
+        checkButton.classList.remove("loading"); // Remove loading effect
+      }
+    }
+  </script>
+</body>
+</html>
 
