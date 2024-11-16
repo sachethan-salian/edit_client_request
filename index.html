@@ -192,61 +192,64 @@
   <script>
     const webAppUrl = "https://script.google.com/macros/s/AKfycbzFgpCMbyypB9oat7GW05uvncFiayTSzoXqcT3t6WrlKyz8Oe07ZpLO9fpHLcjdEQ9c/exec"; // Replace with your actual Apps Script Web App URL
 
-    async function checkStatus() {
-      const email = document.getElementById("email").value.trim();
-      const resultDiv = document.getElementById("result");
-      const statusText = document.getElementById("statusText");
-      const checkButton = document.getElementById("checkButton");
-      const container = document.getElementById("container");
+async function checkStatus() {
+  const email = document.getElementById("email").value.trim();
+  const resultDiv = document.getElementById("result");
+  const statusText = document.getElementById("statusText");
+  const checkButton = document.getElementById("checkButton");
+  const container = document.getElementById("container");
 
-      resultDiv.style.display = 'none';
-      statusText.className = "status"; // Reset class
+  resultDiv.style.display = 'none';
+  statusText.className = "status"; // Reset class
 
-      if (!email) {
-        alert("Please enter a valid email.");
-        return;
+  if (!email) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  checkButton.classList.add("loading"); // Add loading effect
+
+  try {
+    const response = await fetch(webAppUrl);
+    const data = await response.json();
+
+    const clientData = data.find(row => row[2] === email);
+
+    if (clientData) {
+      resultDiv.style.display = 'block';
+      container.classList.add("expand"); // Animate container width expansion
+
+      document.querySelector(".highlight").textContent = clientData[1];
+      document.querySelector("#result p span").textContent = clientData[0];
+      document.querySelector(".status-info p").textContent = clientData[3];
+      
+      // Set status to 'Pending' if it is empty or undefined
+      const status = clientData[4] ? clientData[4].toUpperCase() : 'PENDING';
+      statusText.textContent = status;
+
+      switch (status.toLowerCase()) {
+        case 'accepted':
+          statusText.classList.add("status-accepted");
+          break;
+        case 'taken up':
+          statusText.classList.add("status-takenup");
+          break;
+        case 'rejected':
+          statusText.classList.add("status-rejected");
+          break;
+        case 'pending':
+          statusText.classList.add("status-pending");
+          break;
       }
-
-      checkButton.classList.add("loading"); // Add loading effect
-
-      try {
-        const response = await fetch(webAppUrl);
-        const data = await response.json();
-
-        const clientData = data.find(row => row[2] === email);
-
-        if (clientData) {
-          resultDiv.style.display = 'block';
-          container.classList.add("expand"); // Animate container width expansion
-
-          document.querySelector(".highlight").textContent = clientData[1];
-          document.querySelector("#result p span").textContent = clientData[0];
-          document.querySelector(".status-info p").textContent = clientData[3];
-          statusText.textContent = clientData[4].toUpperCase();
-
-          switch (clientData[4].toLowerCase()) {
-            case 'accepted':
-              statusText.classList.add("status-accepted");
-              break;
-            case 'taken up':
-              statusText.classList.add("status-takenup");
-              break;
-            case 'rejected':
-              statusText.classList.add("status-rejected");
-              break;
-            case 'pending':
-              statusText.classList.add("status-pending");
-              break;
-          }
-        } else {
-          alert("No record found for this email.");
-        }
-      } catch (error) {
-        alert("Failed to fetch data. Please try again later.");
-      } finally {
-        checkButton.classList.remove("loading"); // Remove loading effect
-      }
+    } else {
+      alert("No record found for this email.");
     }
+  } catch (error) {
+    alert("Failed to fetch data. Please try again later.");
+  } finally {
+    checkButton.classList.remove("loading"); // Remove loading effect
+  }
+}
   </script>
 </body>
 </html>
