@@ -24,12 +24,15 @@
                 <!-- Chat messages will be dynamically loaded here -->
             </div>
 
-            <form class="typing-area" id="chat-form">
-                <input type="hidden" id="sender-email">
-                <input type="hidden" id="recipient-email">
-                <input type="text" id="message-input" class="input-field" placeholder="Type a message here..." autocomplete="off">
-                <button type="submit"><i class="fab fa-telegram-plane"></i></button>
-            </form>
+            <form class="typing-area" id="chat-form" onsubmit="return sendMessage(event);">
+    <input type="hidden" id="sender-email">
+    <input type="hidden" id="recipient-email">
+    <input type="text" id="message-input" class="input-field" placeholder="Type a message here..." autocomplete="off">
+        <div id="send-button" class="send-btn">
+        <i class="fab fa-telegram-plane"></i>
+    </div>
+</form>
+
         </section>
     </div>
 
