@@ -138,6 +138,7 @@ function hideLoading() {
 
 function logindone(){
     menuTickets.style.display = "block";
+menuChat.style.display = "block";
     modeLogout.style.display = "block";
     profiletrue.style.display = "block";
     profilefalse.style.display = "none";
