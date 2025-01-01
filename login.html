@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- ===== CSS ===== -->
+        <link rel="stylesheet" href="login.css">
+    
+        <!-- ===== BOX ICONS ===== -->
+        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+
+        <title>Responsive Login Form Sign In Sign Up</title>
+        <style>
+            /* Loader styles */
+            #loading {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+                display: none;
+            }
+            #loading div {
+                border: 4px solid #f3f3f3;
+                border-top: 3px solid #8A2BE2;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                animation: spin 1s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+/* Popup message style */
+.popup-msg {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #8A2BE2;
+    color: white;
+    border-radius: 5px;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 9999;
+}
+
+/* Fade in effect */
+.popup-msg.show {
+    display: block;
+    opacity: 50%;
+}
+
+#loadimg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    display: none;
+}
+#loadimg div {
+    position: relative;
+    text-align: center;
+}
+#loadimg img.logo {
+    width: 75px; /* Adjust the size of your logo */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    z-index: 1;
+}
+#loadimg span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 4px solid transparent;
+    border-top: 4px solid #8A2BE2;
+    border-radius: 50%;
+    z-index: 2;
+    animation: spin 1s linear infinite;
+  }
+@keyframes spin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+   
+        </style>
+    </head>
+    <body>
+        <!-- Loading effect -->
+      <div id="loadimg">
+    <div>
+        <img src="loading.gif" alt="Logo" class="logo"/>
+        <span></span>
+    </div>
+</div>      
+<div class="popup-msg" id="popupMsg"></div>
+        <div class="login">
+            <div class="login__content">
+                <div class="login__img">
+                    <img src="img/20241127_203057.png" alt="">
+                </div>
+
+                <div class="login__forms">
+                    <!----Login----->
+                  <form class="login__registre" id="login-in" onsubmit="login(); return false;">
+    <h1 class="login__title">Login</h1>
+    
+    <div class="login__box">
+        <i class='bx bx-at login__icon'></i>
+        <input type="email" id="loginEmail" placeholder="Email" class="login__input" required>
+    </div>
+
+    <div class="login__box">
+        <i class='bx bx-lock-alt login__icon'></i>
+        <input type="password" id="loginPassword" placeholder="Password" class="login__input" required>
+    </div>
+
+    <span class="login__forgot" id="reset-pass">Forgot password?</span>
+
+    <!-- Change button type to 'submit' -->
+    <button type="submit" class="login__button">Login</button>
+
+    <div>
+        <span class="login__account">Dont have an Account?</span>
+        <span class="login__signin" id="sign-up">Create New</span>
+    </div>
+</form>
+
+                      <!---Registration---->
+                    
+                    <form action="" class="login__create none" id="login-up" onsubmit="register(); return false;">
+                        <h1 class="login__title">Create Account</h1>
+                      <div id="tooltip-message" style="background-color: #ffdddd; color: red; font-size: 14px; margin-bottom: 10px; border: 1px solid red; border-radius: 4px; display: none;"></div>
+                      <div class="login__box">
+                            <i class='bx bx-user login__icon'></i>
+                            <input type="text" id="r_username" placeholder="Username" class="login__input" required>
+                        </div>
+                      <div class="login__box">
+                            <i class='bx bx-at login__icon'></i>
+                            <input type="email" id="r_email" placeholder="Email" class="login__input" required>
+                        </div>
+                        <div class="login__box">
+                            <i class='bx bx-lock-alt login__icon'></i>
+                            <input type="password" id="r_password" placeholder="Password" class="login__input" required>
+                        </div>
+                    
+                        <button type="submit" class="login__button">Submit</button>
+
+                        <div>
+                            <span class="login__account">Already have an Account ?</span>
+                            <span class="login__signup" id="sign-in">Login</span>
+                        </div>
+                    </form>
+                    <!---------->
+       <!-- Request Password Reset Form -->
+    <form class="login__reset none" id="request-reset-password">
+        <h1 class="login__title">Reset Password</h1>
+        <div class="login__box">
+            <i class='bx bx-at login__icon'></i>
+            <input type="email" id="resetEmail" placeholder="Enter your email" class="login__input" required>
+        </div>
+        <a onclick="requestPasswordReset()" class="login__button">Send Reset Link</a>
+        <div>
+            <span class="login__account">Back to</span>
+            <span class="login__signin" id="back-to-login">Sign In</span>
+        </div>
+    </form>
+
+    <!-- Verify OTP and Reset Password Form -->
+    <form class="login__verify none" id="verify-otp-reset-password">
+        <h1 class="login__title">Verify OTP</h1>
+        <div class="login__box">
+            <i class='bx bx-key login__icon'></i>
+            <input type="text" id="otp" placeholder="Enter OTP" class="login__input" required>
+        </div>
+        <div class="login__box">
+            <i class='bx bx-lock-alt login__icon'></i>
+            <input type="password" id="newPassword" placeholder="New Password" class="login__input" required>
+        </div>
+        <a onclick="verifyOTPAndResetPassword()" class="login__button">Reset Password</a>
+        <div>
+            <span class="login__account">Back to</span>
+            <span class="login__signin" id="back-to-request-reset">Request Reset</span>
+        </div>
+    </form>
+</div>
+<!--------------->
+                   </div>
+            </div>
+        </div>
+
+        <!--===== MAIN JS =====-->
+        <script src="login.js"></script>
+    </body>
+</html>

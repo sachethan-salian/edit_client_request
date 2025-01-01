@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<!--=== Coding by CodingLab | www.codinglabweb.com === -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!----======== CSS ======== -->
+    <link rel="stylesheet" href="index.css">
+     
+    <!----===== Iconscout CSS ===== -->
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+  
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href='https://fonts.googleapis.com/css?family=RobotoDraft' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <title>Admin Dashboard Panel</title> 
+</head>
+<body>
+    <nav>
+        <div style="cursor: pointer;" onclick="reloadpage()" class="logo-name">
+            <div class="logo-image">
+                <img src="loading.gif" alt="">
+            </div>
+
+            <span class="logo_name">Salian Web</span>
+        </div>
+
+        <div class="menu-items">
+            <ul class="nav-links">
+                <li><a href="#" onclick="viewHome()">
+                    <i class="uil uil-home"></i>
+                    <span class="link-name">Home</span>
+                </a></li>
+                <li id="menuTickets"style="display:none"><a href="#" onclick="viewTickets()">
+                    <i class="uil uil-files-landscapes"></i>
+                    <span class="link-name">Tickets</span>
+                </a></li>
+            </ul>
+            
+            <ul class="logout-mode">
+                <li id="modeLogout" style="display:none" onclick="logout()"><a href="#">
+                    <i class="uil uil-signout"></i>
+                    <span class="link-name">Logout</span>
+                </a></li>
+
+                <li class="mode">
+                    <a href="#">
+                        <i class="uil uil-moon"></i>
+                    <span class="link-name">Dark Mode</span>
+                </a>
+
+                <div class="mode-toggle">
+                  <span class="switch"></span>
+                </div>
+            </li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="dashboard">
+<!-- Custom Alert Popup -->
+<div class="alertoverlay" style="display:none" id="alertPopup">
+  <div class="popupAlert">
+    <span class="close-icon" onclick="closePopupalert()">X</span>
+    <h2>Note</h2>
+    <p>Youre not logged in. Please click the login button to log in</p>
+    <a class="ok-btn" href="login.html">Login</a>
+  </div>
+</div>
+        <div class="top">
+    <i class="uil uil-bars sidebar-toggle"></i>
+    <div id="title-container"><span class="main-title" style="display: inline;">SALIAN WEB</span></div>
+    <div id="searchbox" style="border-radius: 5px;" class="search-box">
+        <i id="searchicon" class="uil uil-search" style="cursor: pointer;" onclick="toggleSearchBox()"></i>
+        <input type="text" id="search-input" oninput="filterSuggestionsAndContent()" placeholder="Search here..." style="display: none;">
+        <ul id="suggestion-list" class="dropdown" style="display: none;"></ul>
+    </div>
+
+            
+<div>
+          <a id="profiletrue" href="javascript:void(0)" style="display:none;" class="w3-blue w3-button w3-round-medium" onclick="document.getElementById('id02').style.display='block'">
+      <i class="fa fa-user"> <span id="profileName"></span></i>
+    </a>
+  <a id="profilefalse" href="login.html" style="display:block;" class="w3-blue w3-button w3-round-medium">
+      Login <i class="fa fa-sign-in"></i>
+    </a>
+          </div>
+        </div>
+
+      
+ <div id="id02" class="w3-modal" style="z-index:11">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom">
+    <div class="w3-container w3-round-large w3-padding w3-blue">
+       <span onclick="document.getElementById('id02').style.display='none'"
+       class="w3-button w3-blue w3-right w3-xxlarge"><i class="fa fa-remove"></i></span>
+      <h2>Profile</h2>
+    </div>
+      <div class="w3-panel">
+      <p><strong>Name:</strong> <span id="userName">...</span></p>
+    <p><strong>Email:</strong> <span id="userEmail">...</span></p>
+    <p>
+  <strong>Password:</strong>
+  <span class="pass-word" id="userPassword" data-password="mySecurePassword">
+    <span class="eye-symbol closed-eye uil uil-eye-slash" aria-hidden="true"></span>
+    <span class="eye-symbol open-eye uil uil-eye" aria-hidden="true"></span>
+  </span>
+</p>
+
+    <p><strong>Role:</strong> <span id="userRole">...</span></p>
+<div class="w3-section">
+          <button type="button" class="w3-button w3-red w3-round-large" onclick="document.getElementById('id02').style.display='none'; openEditUserModal()">
+            Update <i class="fa fa-sign-out"></i>
+          </button>
+    </div>
+ </div>
+    </div>
+  </div>
+</div>
+</div>     
+      
+        <div class="dash-content">   
+            <div class="overview">
+              <!-- Loading effect -->
+      <div id="loadimg">
+    <div>
+        <img src="loading.gif" alt="Logo" class="logo"/>
+        <span></span>
+    </div>
+</div>      
+<div class="popup-msg" id="popupMsg"></div>
+
+      
+    <div style="display:block" class="title">
+        <span class="text">Hello, <span class="text w3-text-blue" id="frontName">.......</span></span>
+    </div>  
+    <div style="display:none;" id="draft" class="title">    
+                  <!-- Header Section -->
+    <header style="color: #333; padding: 20px; text-align: center;">
+        <h1>Welcome to Our New Website</h1>
+        <p>Explore our creative services and tutorials</p>
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="content-grid" data-grid="MainData" style="padding: 20px; text-align: center;">
+
+        <!-- Showcase Edited Photos -->
+        <div class="content-item" style="overflow: hidden; display: inline-block; width: 75%; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin: 10px;">
+            <img src="loading.gif" alt="Edited Photos" style="width: 100%; border-radius: 10px;">
+            <h3 style="color: #444;">Showcase of Edited Photos</h3>
+            <p>View a collection of my best work and get inspired!</p>
+        </div>
+
+        <!-- Choose Templates & Tickets -->
+        <div class="content-item" style="overflow: hidden; display: inline-block; width: 75%; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin: 10px;">
+            <img src="loading.gif" alt="Choose Templates" style="width: 100%; border-radius: 10px;">
+            <h3 style="color: #444;">Choose Templates & Tickets</h3>
+            <p>Select from a variety of templates and editing packages.</p>
+        </div>
+
+        <!-- YouTube Vlogs & Tutorials -->
+        <div class="content-item" style="overflow: hidden; display: inline-block; width: 75%; background-color: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 20px; margin: 10px;">
+            <img src="loading.gif" alt="YouTube Vlogs" style="width: 100%; border-radius: 10px;">
+            <h3 style="color: #444;">YouTube Vlogs & Tutorials</h3>
+            <p>Watch tutorials and vlogs for editing tips and behind-the-scenes content.</p>
+        </div>
+
+        <!-- Updates Coming Soon -->
+        <div style="background-color: #ff9800; color: white; padding: 20px; margin-top: 40px;">
+            <h2>Updates Coming Soon!</h2>
+            <p>Stay tuned for new features and exciting updates. Were working on something amazing for you!</p>
+        </div>
+
+    </main>
+    <!-- Footer Section -->
+    <footer style="background-color: #333; color: white; padding: 20px; text-align: center;">
+        <p>&copy; 2024 [Your Website Name]. All Rights Reserved.</p>
+    </footer>
+                  
+            </div>
+               <div style="display:none" id="viewBoxs" class="boxes">
+               	<div class="content-grid" data-grid="Total-Ticket">
+               		<div class="content-item">
+                  <div class="box box1">
+                        <i class="uil uil-ticket"></i>
+                        <span class="text">Total Tickets</span>
+                        <span class="number" id="totalTickets">0</span>
+                    </div>
+                    <!--
+                    <div class="box box2">
+                        <i class="uil uil-comments"></i>
+                        <span class="text">Comments</span>
+                        <span class="number">20,120</span>
+                    </div>
+                    <div class="box box3">
+                        <i class="uil uil-share"></i>
+                        <span class="text">Total Share</span>
+                        <span class="number">10,120</span>
+                    </div> -->
+                </div>
+            </div></div></div>
+
+            <div id="yourTicket" class="activity content-grid" data-grid="Ticket-Table" style="display:none;">
+                <div class="title">
+                    <i class="uil uil-ticket"></i>
+                    <span class="text">Your Tickets</span>
+                </div>
+              <div>
+          <a class="w3-purple w3-button w3-round-large w3-right w3-margin-top w3-margin-right" onclick="document.getElementById('id01').style.display='block'">
+            <i class="fa fa-plus">New</i>
+          </a>
+          <a href="javascript:void(0)" onclick="loadTickets()" class="w3-purple w3-button w3-round-large w3-right w3-margin-top w3-margin-right">
+            <i class="fa fa-refresh">Reload</i>
+          </a></div>
+                <div class="activity-data content-item">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                            </tr>
+                        </thead>
+                            <tbody id="ticketTable">
+                            <!-- Dynamic rows will be inserted here -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+
+      <!-- Modal for "New Message" -->
+<div id="id01" class="w3-modal" style="z-index:11">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom">
+    <div class="w3-container w3-round-large w3-padding w3-purple">
+      <span onclick="document.getElementById('id01').style.display='none'" class="w3-button w3-purple w3-right w3-xxlarge">
+        <i class="fa fa-remove"></i>
+      </span>
+      <h2>New Ticket</h2>
+    </div>
+    <form id="ticketForm" onsubmit="addTicket(event)">
+      <div class="w3-panel">
+        <input type="text" id="type" class="w3-input w3-border w3-margin-bottom" placeholder="Type of Edit" required>
+        <input type="date" id="dueDate" class="w3-input w3-border w3-margin-bottom" required>
+        <input type="url" id="fileUrl" class="w3-input w3-border w3-margin-bottom" placeholder="Paste Your File Link" required>
+        <textarea id="description" class="w3-input w3-border w3-margin-bottom" style="height:150px" placeholder="Description" required></textarea>
+        <div class="w3-section">
+          <button type="button" class="w3-button w3-red" onclick="document.getElementById('id01').style.display='none'">
+            Cancel <i class="fa fa-remove"></i>
+          </button>
+          <button type="submit" class="w3-button w3-purple w3-right">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit Ticket Modal -->
+<div id="editTicketModal" class="w3-modal" style="z-index:4">
+  <div class="w3-modal-content w3-round-large w3-animate-zoom ">
+    <div class="w3-container w3-round-large w3-padding w3-blue">
+      <span onclick="closeEditModal()" class="w3-button w3-blue w3-right w3-xxlarge">
+        <i class="fa fa-remove"></i>
+      </span>
+      <h2>Edit Ticket</h2>
+    </div>
+    <form id="editTicketForm" onsubmit="updateTicket(event)">
+      <div class="w3-panel">
+        <input type="hidden" id="editTicketId">
+        <input type="text" id="editType" class="w3-input w3-border w3-margin-bottom" placeholder="Type of Edit" required>
+        <input type="date" id="editDueDate" class="w3-input w3-border w3-margin-bottom" required>
+        <input type="url" id="editFilesUrl" class="w3-input w3-border w3-margin-bottom" placeholder="Files URL" required>
+        <textarea id="editDescription" class="w3-input w3-border w3-margin-bottom" style="height:150px" placeholder="Description" required></textarea>
+        <div class="w3-section">
+          <button type="button" class="w3-button w3-blue" onclick="closeEditModal()">Cancel</button>
+          <button type="submit" class="w3-button w3-light-grey w3-right">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Edit User Modal -->
+<div id="editUserModal" class="w3-modal" style="z-index:11">
+
+  <div class="w3-modal-content w3-round-large w3-animate-zoom">
+
+    <!-- Modal Header -->
+    <div class="w3-container w3-round-large w3-padding w3-blue">
+      <span onclick="closeEditUserModal()" class="w3-button w3-blue w3-right w3-xxlarge">
+        <i class="fa fa-remove"></i>
+      </span>
+      <h2>Edit User</h2>
+    </div>
+
+    <!-- Modal Body -->
+    <form id="modifyUserForm" onsubmit="modifyUserDetails(event)">
+      <p id="userEmailDisplay" class="w3-padding"></p>
+
+      <div class="w3-panel">
+        <!-- Input Fields -->
+        <input type="text" id="modalNewUsername" name="username" 
+               class="w3-input w3-border w3-margin-bottom" 
+               placeholder="Enter new username">
+
+        <input type="password" id="modalNewPassword" name="password" 
+               class="w3-input w3-border w3-margin-bottom" 
+               placeholder="Enter new password">
+
+        <!-- Modal Actions -->
+        <div class="w3-section">
+          <button type="button" class="w3-button w3-blue" onclick="closeEditUserModal()">Cancel</button>
+          <button type="submit" id="modalModifyUserBtn" class="w3-button w3-light-grey w3-right">Update</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+
+
+
+<!-- Custom Alert Popup -->
+<div class="alertoverlay" style="display:none" id="alertEdit">
+  <div class="popupAlert">
+    <span class="close-icon" onclick="closePopupalert()">X</span>
+    <h2>Note</h2>
+    <p>Ticket Id "<span id="popupTicketId"></span>" is Non Editable, This ticket already expired or near to expire</p>
+    <p>(Date: <span style="color:red;" id="popupTicketDate"></span>)</p>
+    <button class="ok-btn" onclick="closePopupalert()">OK</button>
+  </div>
+</div>
+
+
+
+
+
+</section>
+<!-- Footer Section -->
+<footer class="fixed-footer">
+    <p>&copy; 2024 Salian. All Rights Reserved.</p>
+</footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
