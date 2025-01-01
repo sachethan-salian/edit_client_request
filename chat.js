@@ -41,34 +41,19 @@ document.addEventListener("DOMContentLoaded", () => {
           const messageItem = document.createElement("div");
           messageItem.className = msg.sender === senderEmail ? "outgoing" : "incoming";
 
-          // Create message structure with sender profile and name
-          const messageText = document.createElement("p");
-          messageText.textContent = msg.message;
+          const recipient = users.find(user => user.email === msg.sender);
+          const senderName = msg.sender === senderEmail ? "You" : (recipient ? recipient.username : msg.sender);
 
-          if (msg.sender === senderEmail) {
-            messageItem.innerHTML = `
-              <div class="details">
-                <p><strong>You:</strong> ${msg.message}</p>
-              </div>
-            `;
-          } else {
-            const recipient = users.find(user => user.email === msg.sender);
-            const recipientName = recipient ? recipient.username : msg.sender; // Default to email if no username is found
-            messageItem.innerHTML = `
-              <div class="details">
-                <p><strong>${recipientName}:</strong> ${msg.message}</p>
-              </div>
-            `;
-          }
-
+          messageItem.innerHTML = `
+            <div class="details">
+              <p><strong>${senderName}:</strong> ${msg.message}</p>
+            </div>
+          `;
           chatBox.appendChild(messageItem);
         });
-        // Scroll to the latest message
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the latest message
       })
-      .catch(error => {
-        console.error('Error fetching messages:', error);
-      });
+      .catch(error => console.error("Error fetching messages:", error));
   }
 
   // Initial fetch of messages
@@ -78,8 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchMessagesInterval = setInterval(fetchMessages, 1000);
 
   // Handle message sending
-  document.getElementById("chat-form").addEventListener("submit", e => {
-    e.preventDefault();
+  function sendMessage() {
     const messageInput = document.getElementById("message-input");
     const message = messageInput.value.trim();
     if (message) {
@@ -91,15 +75,24 @@ document.addEventListener("DOMContentLoaded", () => {
             fetchMessages(); // Immediately update chat box with new message
           }
         })
-        .catch(error => {
-          console.error('Error sending message:', error);
-          });
+        .catch(error => console.error("Error sending message:", error));
+    }
+  }
+
+  // Send message on clicking the button
+  document.getElementById("send-button").addEventListener("click", sendMessage);
+
+  // Send message on pressing Enter
+  document.getElementById("message-input").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      sendMessage();
     }
   });
 
   // Function to stop fetching messages and redirect to index.html
   window.stopsetInterval = function () {
     clearInterval(fetchMessagesInterval);
-    window.location.href = "users.html"; // Redirect to index.html
+    window.location.href = "users.html"; // Redirect to the user list page
   };
 });
